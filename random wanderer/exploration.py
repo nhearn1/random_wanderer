@@ -70,8 +70,11 @@ def visit_town(player, town_name):
                     if inn_choice == "1":
                         if player.gold >= 25:
                             player.gold -= 25
-                            player.hp = 100 + 20 * (player.level - 1)
-                            player.mana = 50 + 10 * (player.level - 1)
+                            player.hp = player.max_hp
+                        if player.char_class in ["Wizard", "Cleric"]:
+                            player.mana = player.max_mana
+                        elif player.char_class in ["Fighter", "Rogue"]:
+                            player.energy = player.max_energy
                             print("You enjoy a warm meal and a soft bed. HP and Mana fully restored.")
                         else:
                             print("You don't have enough gold to stay at the inn.")

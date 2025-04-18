@@ -18,9 +18,8 @@ class Character:
         self.char_class = char_class
         self.level = 1
         self.experience = 0
-        self.hp = 100
-        self.mana = 50
-        self.energy = 50
+        self.hp = 100 + 20 * (self.level - 1)
+        self.max_hp = self.hp
         self.gold = 50
         self.inventory = []
         self.weapon = None
@@ -32,6 +31,17 @@ class Character:
         self.invulnerable = False
         self.empowered = False
         self.barrier = False
+        #sets mana and energy based off of class
+        if self.char_class in ["Wizard", "Cleric"]:
+         self.mana = 50 + 10 * (self.level - 1)
+         self.max_mana = self.mana
+         self.energy = 0
+         self.max_energy = 0
+        elif self.char_class in ["Fighter", "Rogue"]:
+         self.energy = 50 + 10 * (self.level - 1)
+         self.max_energy = self.energy
+         self.mana = 0
+         self.max_mana = 0
 
     def set_stats(self):
         if self.char_class == "Fighter":
@@ -57,9 +67,17 @@ class Character:
     def level_up(self):
         self.level += 1
         self.experience = 0
-        self.hp += 20
-        self.mana += 10
-        self.energy += 10
+        self.level += 1
+        self.experience = 0
+        self.max_hp = 100 + 20 * (self.level - 1)
+        self.hp = self.max_hp
+
+        if self.char_class in ["Wizard", "Cleric"]:
+          self.max_mana = 50 + 10 * (self.level - 1)
+          self.mana = self.max_mana
+        elif self.char_class in ["Fighter", "Rogue"]:
+          self.max_energy = 50 + 10 * (self.level - 1)
+          self.energy = self.max_energy
         self.strength += 2
         self.dexterity += 1
         print(f"\nCongratulations! You reached level {self.level}!")
@@ -97,19 +115,23 @@ class Character:
         return False
 
     def show_stats(self):
-        print(f"\nName: {self.name}")
-        print(f"Class: {self.char_class}")
-        print(f"Level: {self.level}")
-        print(f"XP: {self.experience}")
-        print(f"HP: {self.hp}")
-        print(f"Mana: {self.mana}")
-        print(f"Energy: {self.energy}")
-        print(f"Gold: {self.gold}")
-        print(f"Strength: {self.strength}")
-        print(f"Dexterity: {self.dexterity}")
-        print(f"Weapon: {self.weapon}")
-        print(f"Armor: {self.armor}")
-        print(f"Inventory: {self.inventory}\n")
+     print(f"\nName: {self.name}")
+     print(f"Class: {self.char_class}")
+     print(f"Level: {self.level}")
+     print(f"XP: {self.experience}")
+     print(f"HP: {self.hp} / {self.max_hp}")
+
+     if self.char_class in ["Wizard", "Cleric"]:
+        print(f"Mana: {self.mana} / {self.max_mana}")
+     elif self.char_class in ["Fighter", "Rogue"]:
+        print(f"Energy: {self.energy} / {self.max_energy}")
+
+     print(f"Strength: {self.strength}")
+     print(f"Dexterity: {self.dexterity}")
+     print(f"Gold: {self.gold}")
+     print(f"Weapon: {self.weapon}")
+     print(f"Armor: {self.armor}")
+     print(f"Inventory: {self.inventory}\n")
 
     def class_action(self, enemy):
      if self.level < 2:

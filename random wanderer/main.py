@@ -45,8 +45,11 @@ while True:
         if in_town or can_rest:
          heal = 10 + player.level * 2
          mana_regen = 15
-         player.hp += heal
-         player.mana += mana_regen
+         player.hp = min(player.hp + heal, player.max_hp)
+         if player.char_class in ["Wizard", "Cleric"]:
+             player.mana = min(player.mana + mana_regen, player.max_mana)
+         elif player.char_class in ["Fighter", "Rogue"]:
+             player.energy = min(player.energy + 10, player.max_energy)  # Optional energy regen
          print(f"You rest and recover {heal} HP and {mana_regen} Mana.")
         else:
          print("You can only rest in towns or safe zones.")
