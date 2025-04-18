@@ -45,45 +45,45 @@ def fight(player):
         else:
             print("Invalid action.")
 
-    if enemy.hp > 0:
-    # 1. Unbreakable Will (no damage at all)
-        if getattr(player, "invulnerable", False):
-            print("You are immune to all damage this turn! (Unbreakable Will)")
-            player.invulnerable = False
-            return
+        # Enemy attacks after player's turn
+        if enemy.hp > 0:
+            # 1. Unbreakable Will
+            if getattr(player, "invulnerable", False):
+                print("You are immune to all damage this turn! (Unbreakable Will)")
+                player.invulnerable = False
+            # 2. Evasion
+            elif getattr(player, "evasion", False):
+                print("You evade the attack completely!")
+                player.evasion = False
+            else:
+                # 3. Roll damage
+                dmg = max(0, random.randint(5, enemy.damage))
 
-    # 2. Evasion (completely dodge the hit)
-    if getattr(player, "evasion", False):
-        print("You evade the attack completely!")
-        player.evasion = False
-        return
+                # 4. Arcane Shield
+                if getattr(player, "shielded", False):
+                    dmg = dmg // 4
+                    player.shielded = False
+                    print("Arcane Shield reduces the incoming damage!")
 
-    # 3. Roll damage
-    dmg = max(0, random.randint(5, enemy.damage))
+                # 5. Divine Barrier
+                elif getattr(player, "barrier", False):
+                    dmg = dmg // 2
+                    player.barrier = False
+                    print("Divine Barrier reduces the incoming damage!")
 
-    # 4. Arcane Shield (75% reduction)
-    if getattr(player, "shielded", False):
-        dmg = dmg // 4
-        player.shielded = False
-        print("Arcane Shield reduces the incoming damage!")
+                # 6. Defensive Stance
+                elif getattr(player, "defending", False):
+                    dmg = dmg // 2
+                    player.defending = False
+                    print("Your Defensive Stance reduces the incoming damage!")
 
-    # 5. Divine Barrier (50% reduction)
-    elif getattr(player, "barrier", False):
-        dmg = dmg // 2
-        player.barrier = False
-        print("Divine Barrier reduces the incoming damage!")
+                # 7. Apply damage
+                player.hp -= dmg
+                print(f"The {enemy.name} hits you for {dmg} damage!")
 
-    # 6. Defensive Stance (Fighter, 50% reduction)
-    elif getattr(player, "defending", False):
-        dmg = dmg // 2
-        player.defending = False
-        print("Your Defensive Stance reduces the incoming damage!")
-
-    # 7. Apply damage
-    player.hp -= dmg
-    print(f"The {enemy.name} hits you for {dmg} damage!")
+    # After battle outcome
     if player.hp > 0:
-        print(f"You defeated the {enemy.name}!")
+        print(f"\nYou defeated the {enemy.name}!")
         player.gain_experience(enemy.xp_reward)
         player.gold += enemy.gold_reward
         print(f"You looted {enemy.gold_reward} gold!")
