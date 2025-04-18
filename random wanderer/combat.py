@@ -17,19 +17,19 @@ def fight(player):
         print("4. Run")
         action = input("Enter the number of your choice: ")
 
-        if action == "attack":
+        if action == "1":
             base = 5 if player.weapon else 0
             dmg = base + player.strength + random.randint(1, 10)
             enemy.hp -= dmg
             print(f"You strike the {enemy.name} for {dmg} damage!")
 
-        elif action == "ability":
+        elif action == "2":
             if hasattr(player, 'class_action'):
                 player.class_action(enemy)
             else:
                 print("You don't have any special abilities.")
 
-        elif action == "inventory":
+        elif action == "3":
             print("Inventory:", player.inventory)
             item = input("Use an item or type 'cancel': ")
             if item in player.inventory:
@@ -38,7 +38,7 @@ def fight(player):
                 else:
                     print("That item can't be used now.")
 
-        elif action == "run":
+        elif action == "4":
             print("You run from the battle!")
             return
 
